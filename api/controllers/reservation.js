@@ -86,13 +86,38 @@ export const updateReservation = async (req, res) => {
 };
 
 // Delete a reservation by ID
+//export const deleteReservation = async (req, res) => {
+ // try {
+   // const reservation = await Reservation.findByIdAndDelete(req.params.id);
+  //  if (!reservation) {
+   //   res.status(404).json({ message: "Reservation not found" });
+   //   return;
+   // }
+   // res.status(200).json({ message: "Reservation deleted successfully" });
+  ///} catch (error) {
+   // res.status(500).json({ message: error.message });
+ // }
+//};
+// Delete a reservation by ID
 export const deleteReservation = async (req, res) => {
   try {
+    // Find the reservation to delete by its ID
     const reservation = await Reservation.findByIdAndDelete(req.params.id);
     if (!reservation) {
       res.status(404).json({ message: "Reservation not found" });
       return;
     }
+
+    // Once the reservation is deleted, update the corresponding room to mark it as available
+    const room = await Room.findById(reservation.roomId);
+    if (!room) {
+      res.status(404).json({ message: "Room not found" });
+      return;
+    }
+
+    room.available = true; // Mark the room as available
+    await room.save();
+
     res.status(200).json({ message: "Reservation deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
