@@ -8,13 +8,26 @@ export const createReservation = async (req, res) => {
     // Extract data from request body
     const { userId, roomId, startTime, endTime } = req.body;
 
-    // Check if the room is available
+    // Check if the room exists
     const room = await Room.findById(roomId);
     if (!room) {
       return res.status(404).json({ message: "Room not found" });
     }
-    if (!room.available) {
-      return res.status(400).json({ message: "Room is not available" });
+
+    // Check if the room is available for the specified time period
+    const existingReservation = await Reservation.findOne({
+      roomId: roomId,
+      $or: [
+        { startTime: { $lt: endTime }, endTime: { $gt: startTime } }, // Check if there is any overlapping reservation
+        { $and: [ // Check if the new reservation completely contains an existing reservation
+            { startTime: { $gte: startTime, $lte: endTime } },
+            { endTime: { $gte: startTime, $lte: endTime } }
+          ]
+        }
+      ]
+    });
+    if (existingReservation) {
+      return res.status(400).json({ message: "Room is not available for the specified time period" });
     }
 
     // Create reservation

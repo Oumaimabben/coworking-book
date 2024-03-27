@@ -46,4 +46,20 @@ export const createRoom = async (req, res, next) => {
         next(err)
     }
   };  
-  
+
+export const getAvailableRooms = async (req, res) => {
+  try {
+    // Recherche des chambres disponibles
+    const availableRooms = await Room.find({ available: true });
+
+    // Si aucune chambre disponible n'est trouvée, renvoyer un tableau vide
+    if (availableRooms.length === 0) {
+      return res.status(404).json({ message: "Aucune salle disponible trouvée" });
+    }
+
+    // Envoyer la liste des chambres disponibles en réponse
+    res.status(200).json(availableRooms);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
