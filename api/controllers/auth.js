@@ -48,6 +48,7 @@ export const login = async(req,res,next)=>{
     }catch(err){
         next(err);
       } }
+      //logout
     export const logout = async(req,res,next)=>{
       try {
           // Effacer le cookie contenant le jeton d'accès

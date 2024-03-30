@@ -29,15 +29,7 @@ export const createRoom = async (req, res, next) => {
     }
 
   };
-  export const getRoom = async (req, res, next) => {
-    try{
-        const room = await Room.findById(req.params.id)
-        res.status(200).json(room)
-    }catch(err){
-        next(err)
-    }
-
-  };
+ 
   export const getRooms = async (req, res, next) => {
     try{
         const rooms = await Room.find()
@@ -47,19 +39,35 @@ export const createRoom = async (req, res, next) => {
     }
   };  
 
-export const getAvailableRooms = async (req, res) => {
-  try {
-    // Recherche des chambres disponibles
-    const availableRooms = await Room.find({ available: true });
 
-    // Si aucune chambre disponible n'est trouvée, renvoyer un tableau vide
-    if (availableRooms.length === 0) {
-      return res.status(404).json({ message: "Aucune salle disponible trouvée" });
+
+  export const getRoomDetails = async (req, res) => {
+    try {
+      const { roomId } = req.params;
+      const room = await Room.findById(roomId);
+      console.log("Room: ", room); // Log the room object to inspect its structure
+      if (!room) {
+        return res.status(404).json({ message: "Room not found" });
+      }
+  
+      // Extract reservation intervals from the room's reservations array
+      const reservationIntervals = room.reservations.map(reservation => ({
+        startTime: reservation.startTime,
+        endTime: reservation.endTime
+      }));
+  
+      res.status(200).json({
+        _id: room._id,
+        name: room.name,
+        desc: room.desc,
+        capacity: room.capacity,
+        amenities: room.amenities,
+        available: room.available,
+        reservations: reservationIntervals // Include reservation intervals in response
+      });
+    } catch (error) {
+      console.log("Error: ", error); // Log any errors that occur
+      res.status(400).json({ message: error.message });
     }
-
-    // Envoyer la liste des chambres disponibles en réponse
-    res.status(200).json(availableRooms);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  };
+  

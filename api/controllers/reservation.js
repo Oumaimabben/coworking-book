@@ -1,6 +1,6 @@
 import Reservation from "../models/Reservation.js";
 import Room from "../models/Room.js";
-// Controller functions
+
 
 // Create a new reservation
 export const createReservation = async (req, res) => {
@@ -32,7 +32,8 @@ export const createReservation = async (req, res) => {
 
     // Create reservation
     const reservation = await Reservation.create(req.body);
-
+      // Add reservation to the room's reservations array
+      room.reservations.push(reservation);
     // Update room availability
     room.available = false; // Room is no longer available
     await room.save();
@@ -42,6 +43,13 @@ export const createReservation = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
+
+
+
+
+
+
 
 // Get all reservations
 export const getAllReservations = async (req, res) => {

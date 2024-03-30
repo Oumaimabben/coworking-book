@@ -4,9 +4,8 @@ import {
     createRoom,
     updateRoom,
     deleteRoom,
-    getRoom,
     getRooms,
-    getAvailableRooms,
+    getRoomDetails
   } from "../controllers/room.js";
 import { verifyAdmin } from "../utils/verifyToken.js";
 
@@ -19,11 +18,13 @@ router.put("/:id",verifyAdmin, updateRoom);
 //DELETE
 router.delete("/:id",verifyAdmin, deleteRoom);
 //GET
-router.get("/:id", getRoom);
+//router.get("/:id", getRoom);
 //GET ALL
-router.get("/", getRooms);
-//GETAVAILABLEROOM
-router.get("/rooms/available", getAvailableRooms);
+//router.get("/", getRooms);
+
+//getRoomDetails
+router.get("/:roomId", getRoomDetails);
+
 
 
 
