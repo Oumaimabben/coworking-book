@@ -1,5 +1,6 @@
 import Reservation from "../models/Reservation.js";
 import Room from "../models/Room.js";
+import { sendReservationConfirmationEmail } from "../utils/emailService.js";
 
 
 // Create a new reservation
@@ -37,7 +38,12 @@ export const createReservation = async (req, res) => {
     // Update room availability
     room.available = false; // Room is no longer available
     await room.save();
-
+    // Envoyer un e-mail de confirmation de réservation
+    const reservationDetails = {
+      date: startTime, // ou toute autre information pertinente sur la réservation
+      room: room.name // ou toute autre information pertinente sur la salle
+    };
+    sendReservationConfirmationEmail('destinataire@example.com', reservationDetails);
     res.status(201).json(reservation);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -87,6 +93,17 @@ export const updateReservation = async (req, res) => {
       res.status(404).json({ message: "Reservation not found" });
       return;
     }
+    
+    // Extract room information from the updated reservation object
+    const { room } = reservation;
+    
+    // Envoyer un e-mail de confirmation de mise à jour de réservation
+    const reservationDetails = {
+      date: reservation.startTime,
+      room: room // Include the room information
+    };
+    ssendReservationModificationEmail('destinataire@example.com', reservationDetails);
+
     res.status(200).json(reservation);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -125,6 +142,14 @@ export const deleteReservation = async (req, res) => {
 
     room.available = true; // Mark the room as available
     await room.save();
+
+    // Envoyer un e-mail de confirmation de suppression de réservation
+    const reservationDetails = {
+      date: reservation.startTime, // ou toute autre information pertinente sur la réservation
+      room: room.name // ou toute autre information pertinente sur la salle
+    };
+    sendReservationCancellationEmail('destinataire@example.com', reservationDetails);
+
 
     res.status(200).json({ message: "Reservation deleted successfully" });
   } catch (error) {
