@@ -1,5 +1,6 @@
 import  express  from "express";
 import Reservation from "../models/Reservation.js";
+import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js";
 import {
    
     createReservation,
@@ -12,15 +13,15 @@ import {
 const router = express.Router();
 
 //CREATE
-router.post("/", createReservation);
+router.post("/", verifyUser,createReservation);
 //UPDATE
-router.put("/:id", updateReservation);
+router.put("/:id",verifyUser, updateReservation);
 //DELETE
-router.delete("/:id", deleteReservation);
+router.delete("/:id",verifyUser, deleteReservation);
 //GET
-router.get("/:id", getReservationById);
+router.get("/:id",verifyUser, getReservationById);
 //GET ALL
-router.get("/", getAllReservations);
+router.get("/",verifyUser, getAllReservations);
 
 
 

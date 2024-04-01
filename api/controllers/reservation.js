@@ -1,6 +1,6 @@
 import Reservation from "../models/Reservation.js";
 import Room from "../models/Room.js";
-import { sendReservationConfirmationEmail } from "../utils/emailService.js";
+import { sendReservationConfirmationEmail,sendReservationModificationEmail,sendReservationCancellationEmail } from "../utils/emailService.js";
 
 
 // Create a new reservation
@@ -102,7 +102,7 @@ export const updateReservation = async (req, res) => {
       date: reservation.startTime,
       room: room // Include the room information
     };
-    ssendReservationModificationEmail('destinataire@example.com', reservationDetails);
+    sendReservationModificationEmail('destinataire@example.com', reservationDetails);
 
     res.status(200).json(reservation);
   } catch (error) {
