@@ -41,7 +41,7 @@ export const createRoom = async (req, res, next) => {
 
 
 
-  export const getRoomDetails = async (req, res) => {
+  export const getRoomDetails = async (req, res, next) => {
     try {
       const { roomId } = req.params;
       const room = await Room.findById(roomId);
@@ -66,8 +66,7 @@ export const createRoom = async (req, res, next) => {
         reservations: reservationIntervals // Include reservation intervals in response
       });
     } catch (error) {
-      console.log("Error: ", error); // Log any errors that occur
-      res.status(400).json({ message: error.message });
+      next(err)
     }
   };
   

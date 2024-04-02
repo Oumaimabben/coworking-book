@@ -7,7 +7,7 @@ import {
     getRooms,
     getRoomDetails
   } from "../controllers/room.js";
-import { verifyAdmin } from "../utils/verifyToken.js";
+import { verifyAdmin, verifyToken } from "../utils/verifyToken.js";
 
 const router = express.Router();
 
@@ -17,13 +17,8 @@ router.post("/",verifyAdmin, createRoom);
 router.put("/:id",verifyAdmin, updateRoom);
 //DELETE
 router.delete("/:id",verifyAdmin, deleteRoom);
-//GET
-//router.get("/:id", getRoom);
-//GET ALL
-//router.get("/", getRooms);
-
 //getRoomDetails
-router.get("/:roomId", getRoomDetails);
+router.get("/:roomId", verifyToken, getRoomDetails);
 
 
 

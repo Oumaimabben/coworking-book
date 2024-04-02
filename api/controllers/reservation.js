@@ -4,7 +4,7 @@ import { sendReservationConfirmationEmail,sendReservationModificationEmail,sendR
 
 
 // Create a new reservation
-export const createReservation = async (req, res) => {
+export const createReservation = async (req, res ,next) => {
   try {
     // Extract data from request body
     const { userId, roomId, startTime, endTime } = req.body;
@@ -46,29 +46,22 @@ export const createReservation = async (req, res) => {
     sendReservationConfirmationEmail('destinataire@example.com', reservationDetails);
     res.status(201).json(reservation);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(err)
   }
 };
 
-
-
-
-
-
-
-
 // Get all reservations
-export const getAllReservations = async (req, res) => {
+export const getAllReservations = async (req, res,next) => {
   try {
     const reservations = await Reservation.find();
     res.status(200).json(reservations);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(err)
   }
 };
 
 // Get a single reservation by ID
-export const getReservationById = async (req, res) => {
+export const getReservationById = async (req, res, next) => {
   try {
     const reservation = await Reservation.findById(req.params.id);
     if (!reservation) {
@@ -77,12 +70,12 @@ export const getReservationById = async (req, res) => {
     }
     res.status(200).json(reservation);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(err)
   }
 };
 
 // Update a reservation by ID
-export const updateReservation = async (req, res) => {
+export const updateReservation = async (req, res, next) => {
   try {
     const reservation = await Reservation.findByIdAndUpdate(
       req.params.id,
@@ -106,25 +99,11 @@ export const updateReservation = async (req, res) => {
 
     res.status(200).json(reservation);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(err)
   }
 };
-
 // Delete a reservation by ID
-//export const deleteReservation = async (req, res) => {
- // try {
-   // const reservation = await Reservation.findByIdAndDelete(req.params.id);
-  //  if (!reservation) {
-   //   res.status(404).json({ message: "Reservation not found" });
-   //   return;
-   // }
-   // res.status(200).json({ message: "Reservation deleted successfully" });
-  ///} catch (error) {
-   // res.status(500).json({ message: error.message });
- // }
-//};
-// Delete a reservation by ID
-export const deleteReservation = async (req, res) => {
+export const deleteReservation = async (req, res ,next) => {
   try {
     // Find the reservation to delete by its ID
     const reservation = await Reservation.findByIdAndDelete(req.params.id);
@@ -153,6 +132,6 @@ export const deleteReservation = async (req, res) => {
 
     res.status(200).json({ message: "Reservation deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(err)
   }
 };

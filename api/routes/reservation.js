@@ -13,15 +13,15 @@ import {
 const router = express.Router();
 
 //CREATE
-router.post("/", verifyUser,createReservation);
+router.post("/",  verifyToken,createReservation);
 //UPDATE
-router.put("/:id",verifyUser, updateReservation);
+router.put("/:id", verifyToken, updateReservation);
 //DELETE
-router.delete("/:id",verifyUser, deleteReservation);
+router.delete("/:id", verifyToken, deleteReservation);
 //GET
-router.get("/:id",verifyUser, getReservationById);
+router.get("/:id", verifyToken, getReservationById);
 //GET ALL
-router.get("/",verifyUser, getAllReservations);
+router.get("/", verifyToken, getAllReservations);
 
 
 
