@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 
-
+   //UPDATE
   export const updateUser= async (req, res, next) => {
     const newUser = new User(req.body)
 
@@ -11,6 +11,7 @@ import User from "../models/User.js";
         next(err)
     }
   };
+  //DELETE
   export const deleteUser = async (req, res, next) => {
     try{
         await User.findByIdAndDelete(req.params.id)
@@ -18,8 +19,8 @@ import User from "../models/User.js";
     }catch(err){
         next(err)
     }
-
   };
+  //GETBYID
   export const getUser = async (req, res, next) => {
     try{
         const User = await User.findById(req.params.id)
@@ -27,8 +28,8 @@ import User from "../models/User.js";
     }catch(err){
         next(err)
     }
-
   };
+  //GETALL
   export const getUsers = async (req, res, next) => {
     try{
         const users = await User.find()
