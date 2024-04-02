@@ -4,12 +4,12 @@ const ReservationSchema = new mongoose.Schema(
   {
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Référence à votre modèle User
+    ref: 'User', 
     required: true
   },
   roomId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Room', // Référence à votre modèle Room
+    ref: 'Room', 
     required: true
   },
   startTime: {
@@ -20,9 +20,7 @@ const ReservationSchema = new mongoose.Schema(
     type: Date,
     required: true
   },
-  // Autres champs de votre modèle Reservation
 });
-
 
 export default mongoose.model("Reservation",  ReservationSchema );
 
